@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zinnia Manhwa - Filter</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: 'Orbitron', sans-serif;
+        background: radial-gradient(circle at top left, #0d0d0f, #1a1a2e);
+        color: #eee;
+        min-height: 100vh;
+      }
+
+      nav {
+        display: flex;
+        justify-content: center;
+        padding: 18px 24px;
+        margin: 24px 20px;
+        background: rgba(10, 15, 30, 0.75);
+        border: 1px solid rgba(0, 255, 255, 0.18);
+        box-shadow: 0 0 24px rgba(0, 255, 255, 0.1);
+        backdrop-filter: blur(18px);
+        border-radius: 999px;
+      }
+
+      nav ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        justify-content: center;
+      }
+
+      nav li {
+        margin: 0;
+      }
+
+      nav a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 18px;
+        color: #eee;
+        text-decoration: none;
+        border-radius: 999px;
+        background: rgba(0, 255, 255, 0.08);
+        border: 1px solid transparent;
+        font-weight: 600;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        transition: color 0.25s ease, background 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+        white-space: nowrap;
+      }
+
+      nav a:hover,
+      nav a.active {
+        color: #00f0ff;
+        background: rgba(0, 255, 255, 0.18);
+        border-color: rgba(0, 255, 255, 0.45);
+        text-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+        transform: translateY(-1px);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(240px, 1fr));
+        gap: 24px;
+        max-width: 1200px;
+        margin: 0 auto 40px;
+        padding: 0 20px;
+      }
+
+      .card {
+        background: rgba(20, 30, 50, 0.8);
+        border: 1px solid rgba(0, 255, 255, 0.12);
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
+        transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-6px);
+        border-color: rgba(0, 255, 255, 0.28);
+        box-shadow: 0 18px 50px rgba(0, 255, 255, 0.14);
+      }
+
+      .card img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        display: block;
+      }
+
+      .card-content {
+        padding: 18px 16px 20px;
+      }
+
+      .card-content h3 {
+        margin: 0 0 8px;
+        font-size: 18px;
+        color: #4af3ff;
+      }
+
+      .card-content .meta {
+        margin: 0;
+        font-size: 13px;
+        color: #c6e7ff;
+        opacity: 0.88;
+      }
+
+      @media (max-width: 1024px) {
+        .grid {
+          grid-template-columns: repeat(2, minmax(220px, 1fr));
+        }
+      }
+
+      @media (max-width: 768px) {
+        nav {
+          margin: 16px 12px;
+          padding: 14px 14px;
+        }
+
+        nav ul {
+          gap: 8px;
+        }
+
+        nav a {
+          padding: 10px 14px;
+          font-size: 13px;
+        }
+
+        .grid {
+          grid-template-columns: 1fr;
+          padding: 0 12px;
+        }
+      }
+      .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 30px auto 40px;
+      max-width: 720px;
+      padding: 0 20px;
+    }
+
+    .page-item {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 46px;
+      height: 46px;
+      background: rgba(9, 53, 120, 0.25);
+      border: 1px solid rgba(71, 159, 255, 0.45);
+      color: #cce7ff;
+      border-radius: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+      text-decoration: none;
+    }
+
+    .page-item:hover {
+      background: rgba(13, 89, 191, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .page-item.active {
+      background: #0d71ff;
+      color: #ffffff;
+      box-shadow: 0 0 18px rgba(13, 113, 255, 0.35);
+      border-color: transparent;
+    }
+
+    .page-item.arrow {
+      width: auto;
+      padding: 0 16px;
+    }
+
+    .page-item.disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .home-top {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.home-btn {
+  display: inline-block;
+  padding: 10px 22px;
+  background:  rgba(0,255,255,0.1);
+  color: #00f0ff;
+  font-weight: 600;
+  text-transform: uppercase;
+  border-radius: 999px;
+  text-decoration: none;
+  box-shadow: 0 0 14px rgba(0, 240, 255, 0.45);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border: 2px solid #00f0ff;
+  text-shadow: 0 0 6px #00f0ff;
+}
+
+.home-btn:hover {
+  background: #00f0ff;
+      color: #0d0d0f;
+      box-shadow: 0 0 15px #00f0ff;
+}
+    </style>
+</head>
+<body>
+   <header class="page-header">
+    <!-- Home button အပေါ်မှာ ထည့် -->
+    <div class="home-top">
+      <a href="manhwa.html" class="home-btn">« Home</a>
+    </div>
+  </header>
+    <nav>
+      <ul>
+        <li><a href="page1.html">Latest</a></li>
+        <li><a href="Rating.html" class="active">Rating</a></li>
+        <li><a href="Trending.html">Trending</a></li>
+        <li><a href="MostViews.html">Most Views</a></li>
+        <li><a href="New.html">New</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <section class="grid">
+        <article class="card">
+          <img src="images/1.jpg" alt="Friends">
+          <div class="card-content">
+            <h3>Friends</h3>
+            <p class="meta">167.5K Views • Rating 4.9 • Jan 7, 24</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <img src="images/2.jpg" alt="Duty">
+          <div class="card-content">
+            <h3>Duty</h3>
+            <p class="meta">90.9K Views • Rating 3.8 • Jan 7, 24</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <img src="images/3.jpg" alt="Watch">
+          <div class="card-content">
+            <h3>Watch</h3>
+            <p class="meta">90.9K Views • Rating 3.8 • Jan 7, 24</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <img src="images/1.jpg" alt="Action">
+          <div class="card-content">
+            <h3>Action</h3>
+            <p class="meta">110.4K Views • Rating 4.5 • Jan 10, 24</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <img src="images/2.jpg" alt="Adventure">
+          <div class="card-content">
+            <h3>Adventure</h3>
+            <p class="meta">98.7K Views • Rating 4.2 • Jan 12, 24</p>
+          </div>
+        </article>
+
+        <article class="card">
+          <img src="images/3.jpg" alt="Mystery">
+          <div class="card-content">
+            <h3>Mystery</h3>
+            <p class="meta">73.1K Views • Rating 4.1 • Jan 15, 24</p>
+          </div>
+        </article>
+      </section>
+       <div class="pagination">
+  <a id="pagePrev" class="page-item arrow" href="#">«</a>
+  <a class="page-item" href="Rating.html">1</a>
+  <a class="page-item active" href="page56.html">2</a>
+  <a class="page-item" href="page57.html">3</a>
+  <a id="pageNext" class="page-item arrow" href="#">»</a>
+</div>
+    </main>
+    <script>
+      
+  function setPaginationArrows() {
+    const activeItem = document.querySelector('.pagination .page-item.active');
+    const prevLink = document.getElementById('pagePrev');
+    const nextLink = document.getElementById('pageNext');
+    if (!activeItem || !prevLink || !nextLink) return;
+
+    const pageItems = Array.from(document.querySelectorAll('.pagination .page-item'))
+      .filter(item => !item.classList.contains('arrow'));
+    const activeIndex = pageItems.findIndex(item => item.classList.contains('active'));
+    if (activeIndex === -1) return;
+
+    const prevPage = pageItems[activeIndex - 1];
+    const nextPage = pageItems[activeIndex + 1];
+
+    if (prevPage) {
+      prevLink.href = prevPage.href;
+      prevLink.classList.remove('disabled');
+    } else {
+      prevLink.href = '#';
+      prevLink.classList.add('disabled');
+    }
+
+    if (nextPage) {
+      nextLink.href = nextPage.href;
+      nextLink.classList.remove('disabled');
+    } else {
+      nextLink.href = '#';
+      nextLink.classList.add('disabled');
+    }
+  }
+
+  // Page number click → activate clicked page
+  document.querySelectorAll('.pagination .page-item:not(.arrow)').forEach(item => {
+    item.addEventListener('click', function(e) {
+      e.preventDefault();
+      const activeItem = document.querySelector('.pagination .page-item.active');
+      if (activeItem) activeItem.classList.remove('active');
+      this.classList.add('active');
+      setPaginationArrows();
+      // 👉 page ကိုပြောင်း
+      window.location.href = this.href;
+    });
+  });
+
+  // Next button click
+  document.getElementById('pageNext').addEventListener('click', function(e) {
+    e.preventDefault();
+    const activeItem = document.querySelector('.pagination .page-item.active');
+    const pageItems = Array.from(document.querySelectorAll('.pagination .page-item'))
+      .filter(item => !item.classList.contains('arrow'));
+    const activeIndex = pageItems.findIndex(item => item.classList.contains('active'));
+    const nextPage = pageItems[activeIndex + 1];
+    if (nextPage) {
+      activeItem.classList.remove('active');
+      nextPage.classList.add('active');
+      setPaginationArrows();
+      window.location.href = nextPage.href;
+    }
+  });
+
+  // Prev button click
+  document.getElementById('pagePrev').addEventListener('click', function(e) {
+    e.preventDefault();
+    const activeItem = document.querySelector('.pagination .page-item.active');
+    const pageItems = Array.from(document.querySelectorAll('.pagination .page-item'))
+      .filter(item => !item.classList.contains('arrow'));
+    const activeIndex = pageItems.findIndex(item => item.classList.contains('active'));
+    const prevPage = pageItems[activeIndex - 1];
+    if (prevPage) {
+      activeItem.classList.remove('active');
+      prevPage.classList.add('active');
+      setPaginationArrows();
+      window.location.href = prevPage.href;
+    }
+  });
+
+  // Initial setup
+  setPaginationArrows();
+</script>
+
+</body>
+</html>
